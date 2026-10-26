@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Academia ASAF: clases de música en video para servir con excelencia.">
+  <title>Academia ASAF · Fe y Música</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <style>
+    :root {
+      --marino: #0f2342;
+      --marino-2: #1b3560;
+      --dorado: #b8862e;
+      --dorado-claro: #e9d3a6;
+      --fondo: #f6f3ec;
+      --tarjeta: #ffffff;
+      --borde: #e3ddd0;
+      --texto: #1c2433;
+      --texto-suave: #5e6778;
+      --ok: #2f8f5b;
+      --radio: 14px;
+      --sombra: 0 6px 24px rgba(15, 35, 66, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    button { font: inherit; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+
+    /* ---------- Cabecera ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--marino);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+    .cabecera {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .marca {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .marca img {
+      width: 44px; height: 44px;
+      background: #fff;
+      border-radius: 50%;
+      padding: 4px;
+      object-fit: contain;
+    }
+    .marca strong { display: block; font-size: 1.1rem; letter-spacing: 0.04em; }
+    .marca small { display: block; color: var(--dorado-claro); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    #cursos-nav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin-left: auto;
+      scrollbar-width: none;
+    }
+    #cursos-nav::-webkit-scrollbar { display: none; }
+    .curso-tab {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: transparent;
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+    .curso-tab:hover { border-color: var(--dorado); }
+    .curso-tab.activo { background: var(--dorado); border-color: var(--dorado); color: #fff; font-weight: 600; }
+
+    #aviso {
+      max-width: 1300px;
+      margin: 16px auto 0;
+      width: calc(100% - 48px);
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: #fdf0e6;
+      border: 1px solid #f0c9a8;
+      color: #7a3a10;
+    }
+
+    main { flex: 1; width: 100%; }
+
+    /* ---------- Inicio ---------- */
+    .hero {
+      background: linear-gradient(180deg, #fff 0%, var(--fondo) 100%);
+      border-bottom: 1px solid var(--borde);
+    }
+    .hero-contenido {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero img { width: 100%; height: auto; }
+    .hero h1 { margin: 0 0 12px; font-size: 2.2rem; color: var(--marino); line-height: 1.15; }
+    .hero h1 span { color: var(--dorado); }
+    .hero p { margin: 0 0 20px; color: var(--texto-suave); font-size: 1.1rem; line-height: 1.55; max-width: 560px; }
+    .versiculo { font-style: italic; color: var(--marino-2); border-left: 3px solid var(--dorado); padding-left: 12px; }
+
+    .seccion { max-width: 1100px; margin: 0 auto; padding: 36px 24px 48px; }
+    .seccion h2 { margin: 0 0 6px; color: var(--marino); font-size: 1.5rem; }
+    .seccion > p { margin: 0 0 24px; color: var(--texto-suave); }
+    #tarjetas {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .tarjeta {
+      text-align: left;
+      background: var(--tarjeta);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio);
+      padding: 22px;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      transition: transform 0.15s, border-color 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--texto);
+    }
+    .tarjeta:hover, .tarjeta:focus-visible { transform: translateY(-3px); border-color: var(--dorado); }
+    .tarjeta .icono {
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      background: var(--marino);
+      border-radius: 12px;
+    }
+    .tarjeta h3 { margin: 6px 0 0; color: var(--marino); font-size: 1.15rem; }
+    .tarjeta p { margin: 0; color: var(--texto-suave); font-size: 0.92rem; line-height: 1.45; flex: 1; }
+    .tarjeta .estado { font-size: 0.85rem; color: var(--dorado); font-weight: 600; }
+
+    /* ---------- Curso ---------- */
+    .curso {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 24px;
+      padding: 24px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .reproductor {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: var(--radio);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+    }
+    .reproductor iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .reproductor .vacio {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #c9cfdb; text-align: center; padding: 16px;
+    }
+    #info-leccion { margin-top: 18px; }
+    #info-leccion .etiqueta { color: var(--dorado); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    #info-leccion h2 { margin: 4px 0 0; font-size: 1.45rem; color: var(--marino); }
+    .acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .btn {
+      border: 0;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-principal { background: var(--marino); color: #fff; }
+    .btn-principal:not(:disabled):hover { background: var(--marino-2); }
+    .btn-secundario { background: #fff; color: var(--marino); border: 1px solid var(--borde); }
+    .btn-secundario:not(:disabled):hover { border-color: var(--dorado); }
+    .nota { margin-top: 14px; font-size: 0.88rem; color: var(--texto-suave); }
+
+    aside {
+      background: var(--tarjeta);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      align-self: start;
+      position: sticky;
+      top: 84px;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 108px);
+    }
+    .aside-cabecera { padding: 18px 18px 12px; border-bottom: 1px solid var(--borde); }
+    .aside-cabecera h3 { margin: 0; color: var(--marino); }
+    #descripcion-curso { margin: 4px 0 12px; color: var(--texto-suave); font-size: 0.9rem; }
+    .progreso { height: 8px; background: #eee8db; border-radius: 999px; overflow: hidden; }
+    .progreso div { height: 100%; width: 0; background: linear-gradient(90deg, var(--dorado), #d6a74c); transition: width 0.3s; }
+    #texto-progreso { font-size: 0.85rem; color: var(--texto-suave); margin: 6px 0 0; }
+    #lista-lecciones {
+      list-style: none;
+      margin: 0;
+      padding: 10px;
+      display: grid;
+      gap: 6px;
+      overflow-y: auto;
+    }
+    .leccion-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      background: transparent;
+      color: var(--texto);
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 9px 10px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      line-height: 1.3;
+    }
+    .leccion-btn:hover:not(:disabled) { background: var(--fondo); }
+    .leccion-btn.actual { background: #fbf5e8; border-color: var(--dorado); }
+    .leccion-btn:disabled { cursor: not-allowed; color: #9aa1ad; }
+    .leccion-btn .num {
+      flex: 0 0 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: #eef0f4;
+      color: var(--marino);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .leccion-btn.completada .num { background: var(--ok); color: #fff; }
+    .leccion-btn.actual .num { background: var(--marino); color: #fff; }
+
+    #toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--marino);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border-left: 4px solid var(--dorado);
+      font-weight: 600;
+      box-shadow: var(--sombra);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: transform 0.3s, opacity 0.3s, visibility 0.3s;
+      max-width: calc(100% - 32px);
+    }
+    #toast.visible { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+
+    footer {
+      background: var(--marino);
+      color: #c9cfdb;
+      text-align: center;
+      padding: 20px 16px;
+      font-size: 0.85rem;
+    }
+    footer strong { color: var(--dorado-claro); }
+
+    /* Ayudante invisible para leer listas de reproducción */
+    #lector-listas { position: absolute; width: 1px; height: 1px; left: -9999px; top: 0; overflow: hidden; }
+
+    @media (max-width: 900px) {
+      .curso { grid-template-columns: 1fr; padding: 16px; }
+      aside { position: static; max-height: none; }
+      #lista-lecciones { max-height: 420px; }
+    }
+    @media (max-width: 700px) {
+      .cabecera { flex-wrap: wrap; padding: 10px 16px; gap: 10px; }
+      #cursos-nav { margin-left: 0; width: 100%; }
+      .hero-contenido { grid-template-columns: 1fr; text-align: center; padding: 28px 16px; gap: 16px; }
+      .hero img { width: 180px; margin: 0 auto; }
+      .hero h1 { font-size: 1.7rem; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .versiculo { text-align: left; }
+      .seccion { padding: 28px 16px 40px; }
+      #aviso { width: calc(100% - 32px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="cabecera">
+      <a class="marca" href="#">
+        <img src="img/emblema.png" alt="">
+        <span><strong>ACADEMIA ASAF</strong><small>Fe y Música</small></span>
+      </a>
+      <nav id="cursos-nav" aria-label="Cursos"></nav>
+    </div>
+  </header>
+
+  <div id="aviso" role="alert" hidden></div>
+
+  <main>
+    <!-- Inicio -->
+    <div id="vista-inicio">
+      <section class="hero">
+        <div class="hero-contenido">
+          <img src="img/logo.png" alt="Academia ASAF" width="260" height="260">
+          <div>
+            <h1>Aprende música para <span>servir con excelencia</span></h1>
+            <p>Clases en video, paso a paso, para cada instrumento del ministerio de alabanza. Avanza a tu ritmo: cada clase se desbloquea al terminar la anterior.</p>
+            <p class="versiculo">“Cantad con gozo a Dios, fortaleza nuestra; al Dios de Jacob aclamad con júbilo.” Salmos 81:1, salmo de Asaf</p>
+          </div>
+        </div>
+      </section>
+      <section class="seccion">
+        <h2>Elige tu instrumento</h2>
+        <p>Tu progreso se guarda en este navegador.</p>
+        <div id="tarjetas"></div>
+      </section>
+    </div>
+
+    <!-- Curso -->
+    <div id="vista-curso" class="curso" hidden>
+      <section>
+        <div class="reproductor" id="reproductor">
+          <div class="vacio">Cargando clases…</div>
+        </div>
+        <div id="info-leccion">
+          <div class="etiqueta" id="etiqueta-leccion"></div>
+          <h2 id="titulo-leccion"></h2>
+        </div>
+        <div class="acciones">
+          <button class="btn btn-secundario" id="btn-anterior" disabled>← Anterior</button>
+          <button class="btn btn-secundario" id="btn-completar" disabled>Marcar como completada</button>
+          <button class="btn btn-principal" id="btn-siguiente" disabled>Siguiente clase →</button>
+        </div>
+        <p class="nota">Al terminar el video, la siguiente clase se desbloquea automáticamente.</p>
+      </section>
+
+      <aside>
+        <div class="aside-cabecera">
+          <h3 id="nombre-curso"></h3>
+          <p id="descripcion-curso"></p>
+          <div class="progreso"><div id="barra-progreso"></div></div>
+          <p id="texto-progreso"></p>
+        </div>
+        <ul id="lista-lecciones"></ul>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <strong>Academia ASAF</strong> · Fe y Música
+  </footer>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="lector-listas" aria-hidden="true"></div>
+
+  <script src="app.js"></script>
+  <!-- API oficial de YouTube: permite detectar cuándo termina el video -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
